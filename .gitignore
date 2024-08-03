@@ -1,0 +1,4 @@
+datafiles
+datafiles/*
+build.log
+Dockerfile.backup
