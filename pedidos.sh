@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 produtos=("TV" "GELADEIRA" "TV" "HOMETHEATER" "COMPUTADOR" "MONITOR" "TABLET" "SOUNDBAR" "CELULAR" "NOTEBOOK")
-INFLUXDB_ENDPOINT="http://${INFLUXDB_HOST}:8086/api/v2/write?org=infobarbosa&bucket=ecommerce&precision=ns"
+INFLUXDB_ENDPOINT="https://${INFLUXDB_HOST}:8086/api/v2/write?org=infobarbosa&bucket=ecommerce&precision=ns"
 
 echo "utilizando endpoint: ${INFLUXDB_ENDPOINT}"
 while(true)

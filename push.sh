@@ -1,0 +1,1 @@
+docker push infobarbosa/influxproducer --all-tags
