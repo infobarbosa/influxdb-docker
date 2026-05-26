@@ -1,32 +1,19 @@
 #!/usr/bin/env bash
-produtos=("TV" "GELADEIRA" "TV" "HOMETHEATER" "COMPUTADOR" "MONITOR" "TABLET" "SOUNDBAR" "CELULAR" "NOTEBOOK")
-INFLUXDB_ENDPOINT="${INFLUXDB_URL}/api/v2/write?org=infobarbosa&bucket=ecommerce&precision=ns"
+produtos=("TV" "GELADEIRA" "HOMETHEATER" "COMPUTADOR" "MONITOR" "TABLET" "SOUNDBAR" "CELULAR" "NOTEBOOK")
+paises=("BR" "US" "AU")
+INFLUXDB_URL="${INFLUXDB_URL:-http://influxdb-demo:8086}"
+DATABASE="${DATABASE:-ecommerce}"
 
-echo "utilizando endpoint: ${INFLUXDB_ENDPOINT}"
-while(true)
-do
-    curl --request POST \
-        ${INFLUXDB_ENDPOINT} \
-        --header "Authorization: Token 3y1c3NnlmA1kA061YlROSO0gE5a1ppH_1Ig5HSMCsCX3VKF6zkrBwAtC-Hr6c_TTU8B9kwYOPphDq6hwyw5tLw==" \
-        --header "Content-Type: text/plain; charset=utf-8" \
-        --header "Accept: application/json" \
-        --data-binary "pedidos,produto=${produtos[${RANDOM:0:1}]},pais=BR quantidade=``${RANDOM:0:1}`` `date +%s%N`"
+echo "utilizando endpoint: ${INFLUXDB_URL}/api/v2/write"
 
+while true; do
+    for pais in "${paises[@]}"; do
+        produto=${produtos[$((RANDOM % ${#produtos[@]}))]}
+        quantidade=$(( (RANDOM % 5) + 1 ))
+        preco=$(( (RANDOM % 5000) + 500 ))
 
-    curl --request POST \
-        ${INFLUXDB_ENDPOINT} \
-        --header "Authorization: Token 3y1c3NnlmA1kA061YlROSO0gE5a1ppH_1Ig5HSMCsCX3VKF6zkrBwAtC-Hr6c_TTU8B9kwYOPphDq6hwyw5tLw==" \
-        --header "Content-Type: text/plain; charset=utf-8" \
-        --header "Accept: application/json" \
-        --data-binary "pedidos,produto=${produtos[${RANDOM:0:1}]},pais=US quantidade=``${RANDOM:0:1}`` `date +%s%N`"
-
-    curl --request POST \
-        ${INFLUXDB_ENDPOINT} \
-        --header "Authorization: Token 3y1c3NnlmA1kA061YlROSO0gE5a1ppH_1Ig5HSMCsCX3VKF6zkrBwAtC-Hr6c_TTU8B9kwYOPphDq6hwyw5tLw==" \
-        --header "Content-Type: text/plain; charset=utf-8" \
-        --header "Accept: application/json" \
-        --data-binary "pedidos,produto=${produtos[${RANDOM:0:1}]},pais=AU quantidade=``${RANDOM:0:1}`` `date +%s%N`"
-
-    sleep 0.05
+        curl -sf -XPOST "${INFLUXDB_URL}/api/v2/write?bucket=${DATABASE}&precision=s" \
+            --data-binary "pedidos,produto=${produto},pais=${pais} quantidade=${quantidade},preco=${preco}" || true
+    done
+    sleep 1
 done
-
