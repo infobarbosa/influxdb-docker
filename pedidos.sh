@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 produtos=("TV" "GELADEIRA" "HOMETHEATER" "COMPUTADOR" "MONITOR" "TABLET" "SOUNDBAR" "CELULAR" "NOTEBOOK")
 paises=("BR" "US" "AU")
-INFLUXDB_URL="${INFLUXDB_URL:-http://influxdb-demo:8086}"
+INFLUXDB_URL="${INFLUXDB_URL:-http://influxdb-demo:8181}"
 DATABASE="${DATABASE:-ecommerce}"
 
 echo "utilizando endpoint: ${INFLUXDB_URL}/api/v2/write"
